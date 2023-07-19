@@ -83,7 +83,7 @@ Our development language is Kotlin but we have legacy Java classes. We are follo
 * ViewModel
 * Paging
 * LiveData
-* DataBinding
+* DataBinding 
 * Dagger Hilt
 * Retrofit
 * RxJava

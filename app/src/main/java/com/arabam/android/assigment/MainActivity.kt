@@ -3,9 +3,9 @@ package com.arabam.android.assigment
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.arabam.android.assigment.databinding.ActivityMainBinding
-
+import com.arabam.android.models.Advert
+import com.arabam.android.services.AdvertService
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,17 +25,7 @@ class MainActivity : AppCompatActivity() {
 
 
         try {
-            advertList.add(Advert("SAHİBİNDEN MİS GİBİ BMW", "10.000TL","Almanya", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN KIPKIRMIZI BIR FERRARİ", "15.000TL","Berlin", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN MİS GİBİ BMW", "10.000TL","Almanya", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN KIPKIRMIZI BIR FERRARİ", "15.000TL","Berlin", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN MİS GİBİ BMW", "10.000TL","Almanya", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN KIPKIRMIZI BIR FERRARİ", "15.000TL","Berlin", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN MİS GİBİ BMW", "10.000TL","Almanya", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN KIPKIRMIZI BIR FERRARİ", "15.000TL","Berlin", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN MİS GİBİ BMW", "10.000TL","Almanya", R.drawable.sadcar))
-            advertList.add(Advert("SAHİBİNDEN KIPKIRMIZI BIR FERRARİ", "15.000TL","Berlin", R.drawable.sadcar))
-
+            advertList= AdvertService().getAdvertList()
             advertAdapter.notifyDataSetChanged()
 
         }catch (e:Exception){
