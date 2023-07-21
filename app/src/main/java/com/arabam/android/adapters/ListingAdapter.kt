@@ -1,10 +1,13 @@
-package com.arabam.android.assigment
+package com.arabam.android.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.arabam.android.assigment.DetailsActivity
+import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ListingRowBinding
-import com.arabam.android.models.Advert
+import com.arabam.android.models.listingmodels.Advert
 
 class ListingAdapter(val advertList: ArrayList<Advert>):
      RecyclerView.Adapter<ListingAdapter.AdvertHolder>() {
@@ -26,8 +29,11 @@ class ListingAdapter(val advertList: ArrayList<Advert>):
          holder.binding.locationView.text   = advertList.get(position).location.cityName
          holder.binding.priceFormattedView.text = advertList.get(position).priceFormatted
        //  holder.binding.carImageView.setImageResource(advertList.get(position).image) TODO
+         holder.binding.carImageView.setImageResource(R.drawable.sadcar)
+         holder.itemView.setOnClickListener {
+             val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
+             holder.itemView.context.startActivity(intent)
+         }
 
-    //     val intent = Intent(holder.itemView.context,) TODO
-         // holder.itemview.content.startActivity(intent)
      }
 }
