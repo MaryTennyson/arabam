@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arabam.android.assigment.databinding.DetailsRowBinding
-import com.arabam.android.models.listingmodels.Property
+import com.arabam.android.models.Property
+
 
 class DetailAdapter (val detailsList: ArrayList<Property>): RecyclerView.Adapter<DetailAdapter.DetailHolder>() {
 

@@ -4,7 +4,6 @@ import com.arabam.android.models.Category
 import com.arabam.android.models.Location
 import com.arabam.android.models.Property
 
-
 data class Advert(
     val category: Category,
     val date: String,

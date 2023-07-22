@@ -32,6 +32,7 @@ class ListingAdapter(val advertList: ArrayList<Advert>):
          holder.binding.carImageView.setImageResource(R.drawable.sadcar)
          holder.itemView.setOnClickListener {
              val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
+             intent.putExtra("AdvertID",advertList.get(position).id)
              holder.itemView.context.startActivity(intent)
          }
 

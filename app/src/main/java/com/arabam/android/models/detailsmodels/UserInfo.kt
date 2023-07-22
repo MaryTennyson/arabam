@@ -1,5 +1,6 @@
 package com.arabam.android.models.detailsmodels
 
+
 data class UserInfo(
     val id: Int,
     val nameSurname: String,
