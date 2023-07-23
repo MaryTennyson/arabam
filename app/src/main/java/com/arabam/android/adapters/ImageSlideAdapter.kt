@@ -22,8 +22,7 @@ class ImageSlideAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup?): ImageSlideAdapter.SlideViewHolder {
       val inflate: View= LayoutInflater.from(parent!!.context).inflate(R.layout.detailed_main,null)
-
-        return SlideViewHolder(inflate)
+       return SlideViewHolder(inflate)
     }
 
     override fun onBindViewHolder(viewHolder: ImageSlideAdapter.SlideViewHolder?, position: Int) {

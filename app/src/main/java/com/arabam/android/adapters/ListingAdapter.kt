@@ -1,8 +1,10 @@
 package com.arabam.android.adapters
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.arabam.android.assigment.DetailsActivity
 import com.arabam.android.assigment.R
@@ -26,13 +28,14 @@ class ListingAdapter(val advertList: ArrayList<Advert>):
 
      override fun onBindViewHolder(holder: AdvertHolder, position: Int) {
          holder.binding.titleView.text= advertList.get(position).title
-         holder.binding.locationView.text   = advertList.get(position).location.cityName
+         holder.binding.locationView.text   = "${advertList.get(position).location.cityName}, ${advertList.get(position).location.townName}"
          holder.binding.priceFormattedView.text = advertList.get(position).priceFormatted
-       //  holder.binding.carImageView.setImageResource(advertList.get(position).image) TODO
+      //   holder.binding.carImageView.setImageURI(advertList.get(position).photo.toUri()) TODO İLANLARININ LINKLERİ ÇALIŞMIYOR
          holder.binding.carImageView.setImageResource(R.drawable.sadcar)
          holder.itemView.setOnClickListener {
              val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
              intent.putExtra("AdvertID",advertList.get(position).id)
+             Log.i("test","${advertList.get(position).id}")
              holder.itemView.context.startActivity(intent)
          }
 

@@ -7,7 +7,7 @@ import com.arabam.android.assigment.databinding.DetailsRowBinding
 import com.arabam.android.models.Property
 
 
-class DetailAdapter (val detailsList: ArrayList<Property>): RecyclerView.Adapter<DetailAdapter.DetailHolder>() {
+class DetailAdapter (val detailsList: List<Property>): RecyclerView.Adapter<DetailAdapter.DetailHolder>() {
 
 class DetailHolder(val binding: DetailsRowBinding): RecyclerView.ViewHolder(binding.root){
 
@@ -19,6 +19,7 @@ class DetailHolder(val binding: DetailsRowBinding): RecyclerView.ViewHolder(bind
     }
 
     override fun onBindViewHolder(holder: DetailAdapter.DetailHolder, position: Int) {
+
        holder.binding.detailNameView.text= detailsList.get(position).name
         holder.binding.detailInfoView.text= detailsList.get(position).value
 

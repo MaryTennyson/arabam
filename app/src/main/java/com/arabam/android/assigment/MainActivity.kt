@@ -16,6 +16,7 @@ import com.arabam.android.models.Location
 import com.arabam.android.models.Property
 
 import com.arabam.android.models.listingmodels.Advert
+import com.arabam.android.services.APIService
 import com.arabam.android.services.AdvertAPI
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,12 +41,12 @@ class MainActivity : AppCompatActivity() {
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         binding.includeRecyclerView.recyclerView.layoutManager = layoutManager
+
         loadAdvertData()
 
     }
 
-    private fun loadAdvertData() {
-        Log.i("deneme", "fonksiyona girdi")
+private  fun loadAdvertData() {
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -56,22 +57,15 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<List<Advert>> {
             override fun onResponse(call: Call<List<Advert>>, response: Response<List<Advert>>) {
                 if (response.isSuccessful) {
-                    Log.i("deneme", "deneme1")
                     response.body()?.let {
                         advertList = ArrayList(it)
-                        /* for (advert: Advert in advertList!!) {
-                             Log.i("deneme", "${advert.title}")
-                             println(advert.title)
-                         }*/
+
                         advertList?.let {
                             advertAdapter = ListingAdapter(it)
                             binding.includeRecyclerView.recyclerView.adapter = advertAdapter
-
                         }
-
                     }
                 }
-                Log.i("deneme", "fonksiyonun içinde dolanıyor")
             }
 
             override fun onFailure(call: Call<List<Advert>>, t: Throwable) {
@@ -79,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        Log.i("deneme", "fonksiyonun çıkşındaaa")
+
     }
 
 
