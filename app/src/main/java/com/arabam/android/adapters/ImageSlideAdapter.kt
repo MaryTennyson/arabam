@@ -9,8 +9,8 @@ import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 class ImageSlideAdapter
-    (val imageUrl: ArrayList<String>) : SliderViewAdapter<ImageSlideAdapter.SlideViewHolder>() {
-    var slideList: ArrayList<String> = imageUrl
+    (val imageUrl: ArrayList<Int>) : SliderViewAdapter<ImageSlideAdapter.SlideViewHolder>() {
+    var slideList: ArrayList<Int> = imageUrl
 
     class SlideViewHolder(itemView: View?) : SliderViewAdapter.ViewHolder(itemView) {
         var imageView: ImageView = itemView!!.findViewById(R.id.carImageView)

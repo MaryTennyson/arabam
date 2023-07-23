@@ -6,12 +6,14 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arabam.android.adapters.DetailAdapter
+import com.arabam.android.adapters.ImageSlideAdapter
 import com.arabam.android.adapters.ListingAdapter
 import com.arabam.android.assigment.databinding.DetailedMainBinding
 import com.arabam.android.models.Property
 import com.arabam.android.models.detailsmodels.Details
 import com.arabam.android.models.listingmodels.Advert
 import com.arabam.android.services.AdvertAPI
+import com.smarteist.autoimageslider.SliderView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +26,9 @@ class DetailsActivity : AppCompatActivity() {
     private val BASE_URL = "https://sandbox.arabamd.com/api/v1/"
     private var detail: Details?=null
     private lateinit var detailAdapter: DetailAdapter
-
+   // lateinit var imageUrl: ArrayList<Int>
+   // lateinit var sliderView: SliderView
+   // lateinit var sliderAdapter: ImageSlideAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,9 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         binding.detailsRecyclerView.layoutManager = layoutManager
+      //  imageUrl.add(R.drawable.sadcar,R.drawable.sadcar)
+      //  sliderView= binding.imageslider
+       //sliderAdapter=ImageSlideAdapter(imageUrl)
 
         val advertID = intent.getIntExtra("AdvertID",0)
         Log.i("test","details page (37) :${advertID}")

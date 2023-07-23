@@ -31,7 +31,7 @@ class ListingAdapter(val advertList: ArrayList<Advert>):
          holder.binding.locationView.text   = "${advertList.get(position).location.cityName}, ${advertList.get(position).location.townName}"
          holder.binding.priceFormattedView.text = advertList.get(position).priceFormatted
       //   holder.binding.carImageView.setImageURI(advertList.get(position).photo.toUri()) TODO İLANLARININ LINKLERİ ÇALIŞMIYOR
-         holder.binding.carImageView.setImageResource(R.drawable.sadcar)
+         holder.binding.carImageView.setImageResource(R.drawable.ferrari)
          holder.itemView.setOnClickListener {
              val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
              intent.putExtra("AdvertID",advertList.get(position).id)
