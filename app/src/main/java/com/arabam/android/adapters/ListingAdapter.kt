@@ -4,12 +4,12 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.arabam.android.assigment.DetailsActivity
 import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ListingRowBinding
 import com.arabam.android.models.listingmodels.Advert
+import com.squareup.picasso.Picasso
 
 class ListingAdapter(val advertList: ArrayList<Advert>):
      RecyclerView.Adapter<ListingAdapter.AdvertHolder>() {
@@ -30,8 +30,10 @@ class ListingAdapter(val advertList: ArrayList<Advert>):
          holder.binding.titleView.text= advertList.get(position).title
          holder.binding.locationView.text   = "${advertList.get(position).location.cityName}, ${advertList.get(position).location.townName}"
          holder.binding.priceFormattedView.text = advertList.get(position).priceFormatted
-      //   holder.binding.carImageView.setImageURI(advertList.get(position).photo.toUri()) TODO İLANLARININ LINKLERİ ÇALIŞMIYOR
-         holder.binding.carImageView.setImageResource(R.drawable.ferrari)
+       //  holder.binding.carImageView.setImageResource(photoList.get(position)) //TODO İLANLARININ LINK
+         val newpath= changeUrl(advertList.get(position).photo)
+         Picasso.get().load(newpath).into(holder.binding.carImageView)
+        // holder.binding.carImageView.setImageResource(R.drawable.ferrari)
          holder.itemView.setOnClickListener {
              val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
              intent.putExtra("AdvertID",advertList.get(position).id)
@@ -40,4 +42,9 @@ class ListingAdapter(val advertList: ArrayList<Advert>):
          }
 
      }
+    // Picasso.get().load(postList.get(position).downloadUrl).into(holder.binding.feedImageView)
+    private fun changeUrl(imagePath: String):String{
+        return  imagePath.replace("{0}","800x600")
+
+    }
 }

@@ -7,18 +7,21 @@ import com.arabam.android.models.listingmodels.Advert
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AdvertAPI {
 
 @GET("listing?sort=1&sortDirection=0&take=15")
  fun getAdverts(): Call<List<Advert>>
 
-// @GET("detail?id={advertID}")
- //fun getDetails(@Path("advertID") advertID: Int): Call<Details>
+@GET("{tail}")
+fun getPhotoOfAdvert(@Path("tail") tail: String):Call<Int>
 
- @GET("detail?id=15456643")
- fun getDetails(): Call<Details>
+ @GET("detail")
+  fun getDetails(@Query("id") advertID: Int): Call<Details>
 
+ //@GET("detail?id=15456643")
+ //fun getDetails(): Call<Details>
 
 
 }

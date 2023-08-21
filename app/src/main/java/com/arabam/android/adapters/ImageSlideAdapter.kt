@@ -9,15 +9,15 @@ import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 class ImageSlideAdapter
-    (val imageUrl: ArrayList<Int>) : SliderViewAdapter<ImageSlideAdapter.SlideViewHolder>() {
-    var slideList: ArrayList<Int> = imageUrl
+    (val images: ArrayList<Int>) : SliderViewAdapter<ImageSlideAdapter.SlideViewHolder>() {
+    var slideList: ArrayList<Int> = images
 
-    class SlideViewHolder(itemView: View?) : SliderViewAdapter.ViewHolder(itemView) {
-        var imageView: ImageView = itemView!!.findViewById(R.id.carImageView)
+    class SlideViewHolder(itemView: View) : SliderViewAdapter.ViewHolder(itemView) {
+        var imageView: ImageView = itemView.findViewById(R.id.imageViewSlider)
     }
 
     override fun getCount(): Int {
-        return imageUrl.size
+        return images.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?): ImageSlideAdapter.SlideViewHolder {

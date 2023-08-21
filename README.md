@@ -59,7 +59,7 @@ You can see API details with different methods. We are providing 3 different sol
 
 This request will return list of adverts. With  `take` parameter you can decide how many adverts you will get.
 
-curl -X GET "http://sandbox.arabamd.com/api/v1/listing?sort=1&sortDirection=0&take=10" -H "accept: text/plain"
+curl -X GET "" -H "accept: text/plain"
 
 
 ##### Detail Endpoint
