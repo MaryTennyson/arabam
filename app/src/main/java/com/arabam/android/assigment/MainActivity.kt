@@ -10,15 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.arabam.android.adapters.ListingAdapter
 import com.arabam.android.assigment.databinding.ActivityMainBinding
+import com.arabam.android.models.detailsmodels.Details
 
 import com.arabam.android.models.listingmodels.Advert
 import com.arabam.android.services.AdvertAPI
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
+import retrofit2.*
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val BASE_PHOTO_URL= "https://arbstorage.mncdn.com/ilanfotograflari/"
     private var photoList: ArrayList<Int>?=null
 
-
+    private var compositeDisposable: CompositeDisposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -41,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         binding.includeRecyclerView.recyclerView.layoutManager = layoutManager
 
+        compositeDisposable=CompositeDisposable()
+
         loadAdvertData()
     //  val image=  loadPhotoData("https://arbstorage.mncdn.com/ilanfotograflari/2020/09/12/15456643/3c5b2dd1-856f-406f-8d10-1450061d1966_image_for_silan_15456643_{0}.jpg")
     }
@@ -50,8 +55,19 @@ private  fun loadAdvertData() {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(AdvertAPI::class.java)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build().create<AdvertAPI>()
+
+
+     compositeDisposable?.add(
+        retrofit.getAdverts()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::handleResponse)
+    )
+
+
+  /*  val service = retrofit.create(AdvertAPI::class.java)
         val call = service.getAdverts()
         call.enqueue(object : Callback<List<Advert>> {
             override fun onResponse(call: Call<List<Advert>>, response: Response<List<Advert>>) {
@@ -71,9 +87,26 @@ private  fun loadAdvertData() {
                 t.printStackTrace()
             }
 
-        })
+        })*/
 
     }
+
+
+    private fun handleResponse(adverts: List<Advert>){
+
+            advertList = ArrayList(adverts)
+            advertList?.let {
+                advertAdapter = ListingAdapter(it)
+                binding.includeRecyclerView.recyclerView.adapter = advertAdapter
+            }
+
+        }
+
+    }
+
+
+
+
 //https://arbstorage.mncdn.com/ilanfotograflari/2020/09/12/15456643/3c5b2dd1-856f-406f-8d10-1450061d1966_image_for_silan_15456643_{0}.jpg
   /*  private fun loadPhotoData(){
     for(advert in advertList!!){
@@ -111,7 +144,10 @@ private  fun loadAdvertData() {
 
     }*/
 
-}
+
+
+
+
 
 
 

@@ -134,14 +134,15 @@
 
             android:id="@+id/detailsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/descriptions"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
             android:text="TextView" />
 
     </LinearLayout>

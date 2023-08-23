@@ -56,7 +56,7 @@ class DetailsActivity : AppCompatActivity() {
         val advertID = intent.getIntExtra("AdvertID", 0)
 
         if (advertID == 0) {
-
+            println ("bir hata meydana geldi")
         } else {
 
             val retrofit = Retrofit.Builder()
