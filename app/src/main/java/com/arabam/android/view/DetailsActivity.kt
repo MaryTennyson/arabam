@@ -1,4 +1,4 @@
-package com.arabam.android.assigment
+package com.arabam.android.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -48,9 +48,9 @@ class DetailsActivity : AppCompatActivity() {
         binding.detailsRecyclerView.layoutManager = layoutManager
         sliderView = binding.imageslider
 
-        compositeDisposable = CompositeDisposable()
-        binding.descriptions.visibility = View.GONE
+      //  compositeDisposable = CompositeDisposable()
 
+        binding.descriptions.visibility = View.GONE
         binding.detailsRecyclerView.visibility = View.VISIBLE
 
         val advertID = intent.getIntExtra("AdvertID", 0)
@@ -58,8 +58,7 @@ class DetailsActivity : AppCompatActivity() {
         if (advertID == 0) {
             println ("bir hata meydana geldi")
         } else {
-
-            val retrofit = Retrofit.Builder()
+         /*  val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -70,7 +69,48 @@ class DetailsActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleResponse)
-            )
+            )*/
+
+        }
+    }
+
+  /*  private fun handleResponse(details: Details) {
+        detail = details
+        detail?.let {
+            detailAdapter = DetailAdapter(detail!!.properties)
+            binding.detailsRecyclerView.adapter = detailAdapter
+            binding.titleView.text = detail!!.title
+            binding.locationView.text =
+                "${detail!!.location.cityName}, ${detail!!.location.townName}"
+            binding.priceView.text = detail!!.priceFormatted
+            binding.userName.text=detail!!.userInfo.nameSurname
+            binding.userPhoneNumber.text="+${detail!!.userInfo.phone}"
+            binding.descriptions.text= Html.fromHtml(detail!!.text).toString()
+            println(Html.fromHtml(detail!!.text).toString())
+            imagesUrl = ArrayList(it.photos)
+            sliderAdapter = SliderAdapter(imagesUrl)
+
+            sliderView.setSliderAdapter(sliderAdapter)
+
+
+        }
+
+    }*/
+
+    fun onClickedAdvertInformation(view: View) {
+        binding.descriptions.visibility = View.GONE
+        binding.detailsRecyclerView.visibility = View.VISIBLE
+
+    }
+
+    fun onClickedAdvertDescription(view: View) {
+
+        binding.detailsRecyclerView.visibility = View.GONE
+        binding.descriptions.visibility = View.VISIBLE
+
+
+    }
+}
 
 
 /*   val service = retrofit.create(AdvertAPI::class.java)
@@ -112,49 +152,6 @@ class DetailsActivity : AppCompatActivity() {
   })
 
 }*/
-        }
-    }
-
-    private fun handleResponse(details: Details) {
-        detail = details
-        detail?.let {
-            detailAdapter = DetailAdapter(detail!!.properties)
-            binding.detailsRecyclerView.adapter = detailAdapter
-            binding.titleView.text = detail!!.title
-            binding.locationView.text =
-                "${detail!!.location.cityName}, ${detail!!.location.townName}"
-            binding.priceView.text = detail!!.priceFormatted
-            binding.userName.text=detail!!.userInfo.nameSurname
-            binding.userPhoneNumber.text="+${detail!!.userInfo.phone}"
-            binding.descriptions.text= Html.fromHtml(detail!!.text).toString()
-            println(Html.fromHtml(detail!!.text).toString())
-            imagesUrl = ArrayList(it.photos)
-            sliderAdapter = SliderAdapter(imagesUrl)
-
-            sliderView.setSliderAdapter(sliderAdapter)
-
-
-        }
-
-    }
-
-    fun onClickedAdvertInformation(view: View) {
-        binding.descriptions.visibility = View.GONE
-        binding.detailsRecyclerView.visibility = View.VISIBLE
-
-    }
-
-    fun onClickedAdvertDescription(view: View) {
-
-        binding.detailsRecyclerView.visibility = View.GONE
-        binding.descriptions.visibility = View.VISIBLE
-
-
-    }
-}
-
-
-
 
 
 

@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.arabam.android.assigment.DetailsActivity
+import com.arabam.android.view.DetailsActivity
 
 import com.arabam.android.assigment.databinding.ListingRowBinding
 import com.arabam.android.models.listingmodels.Advert
@@ -45,5 +45,11 @@ class ListingAdapter(val advertList: ArrayList<Advert>) :
     }
     private fun changeUrl(imagePath: String): String {
         return imagePath.replace("{0}", "800x600")
+    }
+
+    fun updateAdvertList(newAdvertList: List<Advert>){
+        advertList.clear()
+        advertList.addAll(newAdvertList)
+        notifyDataSetChanged()
     }
 }

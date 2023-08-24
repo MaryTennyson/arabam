@@ -3,8 +3,10 @@ package com.arabam.android.models.listingmodels
 import com.arabam.android.models.Category
 import com.arabam.android.models.Location
 import com.arabam.android.models.Property
+import com.google.gson.annotations.SerializedName
 
 data class Advert(
+    @SerializedName("category")
     val category: Category,
     val date: String,
     val dateFormatted: String,
