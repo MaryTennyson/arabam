@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -20,6 +21,7 @@ import com.arabam.android.viewmodel.ListingPageViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.collect
 
 import retrofit2.*
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -29,49 +31,52 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel : ListingPageViewModel
+    private lateinit var viewModel: ListingPageViewModel
 
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var advertAdapter: ListingAdapter
+    private val advertAdapter = ListingAdapter(arrayListOf())
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        viewModel = ViewModelProviders.of(this).get(ListingPageViewModel::class.java)
 
-        viewModel=ViewModelProviders.of(this).get(ListingPageViewModel::class.java)
         viewModel.refreshData()
+        observeAdvert()
 
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-        binding.includeRecyclerView.recyclerView.layoutManager = layoutManager
 
-    //    compositeDisposable = CompositeDisposable()
-        observeLiveData()
-      // loadAdvertData()
+        binding.includeRecyclerView.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.includeRecyclerView.recyclerView.adapter = advertAdapter
+
+     //   observeLiveData()
+
     }
 
     private fun observeLiveData() {
-
-    viewModel.adverts.observe(this, Observer { adverts->
-        adverts?.let{
-            advertAdapter.updateAdvertList(adverts)}
-    })
-
-        viewModel.advertLoading.observe(this, Observer { loading->
-            loading?.let {  }
+        viewModel.advertLoading.observe(this, Observer { loading ->
+            loading?.let { }
         })
-
-        viewModel.advertLoadingError.observe(this, Observer { error->
+        viewModel.advertLoadingError.observe(this, Observer { error ->
             error?.let {
 
             }
         })
+    }
 
+    private fun observeAdvert() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.adverts.collect {
+
+                advertAdapter.updateAdvertList(it)
+
+            }
+
+        }
 
     }
 
@@ -90,7 +95,7 @@ class MainActivity : AppCompatActivity() {
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe(this::handleResponse)
      )*/
- }
+}
 
 /*   private fun handleResponse(adverts: List<Advert>) {
      advertList = ArrayList(adverts)
@@ -100,8 +105,6 @@ class MainActivity : AppCompatActivity() {
      }
 
  }*/
-
-
 
 
 //https://arbstorage.mncdn.com/ilanfotograflari/2020/09/12/15456643/3c5b2dd1-856f-406f-8d10-1450061d1966_image_for_silan_15456643_{0}.jpg

@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 
-class SliderAdapter(val imageUrl: ArrayList<String>) :
+class SliderAdapter(val imageUrl: List<String>) :
     SliderViewAdapter<SliderAdapter.SliderViewHolder>() {
 
     class SliderViewHolder(val binding: ImageViewerBinding) :
@@ -41,7 +41,7 @@ class SliderAdapter(val imageUrl: ArrayList<String>) :
 
 }
 
-private fun changeUrl(notconvertedUrl: ArrayList<String>):ArrayList<String>{
+private fun changeUrl(notconvertedUrl: List<String>):ArrayList<String>{
     val convertedList= ArrayList<String>()
     for (imagepath in notconvertedUrl){
       val newimagepath= imagepath.replace("{0}","800x600")

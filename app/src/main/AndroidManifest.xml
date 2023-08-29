@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Arabam">
         <activity
-            android:name=".DetailsActivity"
+            android:name="com.arabam.android.view.DetailsActivity"
             android:exported="false" />
         <activity
             android:name="com.arabam.android.view.MainActivity"

@@ -11,7 +11,7 @@ data class Details(
     val id: Int,
     val location: Location,
     val modelName: String,
-    val photos: List<String>,
+    var photos: List<String>,
     val price: Int,
     val priceFormatted: String,
     val properties: List<Property>,
