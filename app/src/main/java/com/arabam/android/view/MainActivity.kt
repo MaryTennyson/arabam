@@ -1,12 +1,11 @@
 package com.arabam.android.view
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -18,10 +17,12 @@ import com.arabam.android.assigment.databinding.ActivityMainBinding
 import com.arabam.android.models.listingmodels.Advert
 import com.arabam.android.services.AdvertAPI
 import com.arabam.android.viewmodel.ListingPageViewModel
+import com.arabam.android.viewmodel.getDataState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 import retrofit2.*
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -32,11 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ListingPageViewModel
-
     private lateinit var binding: ActivityMainBinding
-
     private val advertAdapter = ListingAdapter(arrayListOf())
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,40 +43,74 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         viewModel = ViewModelProviders.of(this).get(ListingPageViewModel::class.java)
-
         viewModel.refreshData()
         observeAdvert()
 
-
         binding.includeRecyclerView.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.includeRecyclerView.recyclerView.adapter = advertAdapter
-
-     //   observeLiveData()
-
-    }
-
-    private fun observeLiveData() {
-        viewModel.advertLoading.observe(this, Observer { loading ->
-            loading?.let { }
-        })
-        viewModel.advertLoadingError.observe(this, Observer { error ->
-            error?.let {
-
-            }
-        })
     }
 
     private fun observeAdvert() {
-        lifecycleScope.launchWhenCreated {
-            viewModel.adverts.collect {
 
-                advertAdapter.updateAdvertList(it)
-
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED){
+        viewModel.uiState.collect {
+            when(it){
+                is getDataState.onSuccess->{
+                    advertAdapter.updateAdvertList(it.news)
+                    binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
+                    binding.progressBar2.visibility = View.GONE
+                }
+                is getDataState.onPending->{
+                    binding.includeRecyclerView.recyclerView.visibility = View.GONE
+                    binding.progressBar2.visibility = View.VISIBLE
+                }
+                is getDataState.onFailure->{
+                    Toast.makeText(this@MainActivity,"hata",Toast.LENGTH_LONG)
+                }
             }
-
         }
-
     }
+}
+
+
+       /* lifecycleScope.launchWhenCreated {
+            viewModel.adverts.collect {
+                advertAdapter.updateAdvertList(it)
+            }
+        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.advertLoading.collect {
+                if (it) {
+                    binding.includeRecyclerView.recyclerView.visibility = View.GONE
+                    binding.progressBar2.visibility = View.VISIBLE
+                } else {
+                    binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
+                    binding.progressBar2.visibility = View.GONE
+                }
+            }
+        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.advertLoadingError.collect {
+                if (it) {
+                    Toast.makeText(this@MainActivity, "Bir Hata Meydana Geldi", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }*/
+    }
+}
+/*  private fun observeLiveData() {
+      viewModel.advertLoading.observe(this, Observer { loading ->
+          loading?.let { }
+      })
+      viewModel.advertLoadingError.observe(this, Observer { error ->
+          error?.let {
+
+          }
+      })
+  }*/
+
 
 /* private fun loadAdvertData() {
 
@@ -95,7 +127,7 @@ class MainActivity : AppCompatActivity() {
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe(this::handleResponse)
      )*/
-}
+
 
 /*   private fun handleResponse(adverts: List<Advert>) {
      advertList = ArrayList(adverts)

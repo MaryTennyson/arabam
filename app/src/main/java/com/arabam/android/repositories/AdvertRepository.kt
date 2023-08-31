@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 class AdvertRepository ( val dataService: APIService ){
 
     val lastestAdvert: Flow<List<Advert>> = flow {
-        emit(dataService.getDataOfAdverts())
+       emit(dataService.getDataOfAdverts())
 
     }
 

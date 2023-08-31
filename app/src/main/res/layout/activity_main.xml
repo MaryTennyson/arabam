@@ -20,8 +20,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <include layout="@layout/content_main"
          android:id="@+id/includeRecyclerView"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/includeRecyclerView"
+        app:layout_anchorGravity="center" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
