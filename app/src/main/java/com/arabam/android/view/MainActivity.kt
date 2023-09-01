@@ -1,33 +1,27 @@
 package com.arabam.android.view
 
+
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
-
 import com.arabam.android.adapters.ListingAdapter
 import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ActivityMainBinding
-
 import com.arabam.android.models.listingmodels.Advert
-import com.arabam.android.services.AdvertAPI
+import com.arabam.android.viewmodel.GetDataState
 import com.arabam.android.viewmodel.ListingPageViewModel
-import com.arabam.android.viewmodel.getDataState
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-import retrofit2.*
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,56 +43,65 @@ class MainActivity : AppCompatActivity() {
         binding.includeRecyclerView.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.includeRecyclerView.recyclerView.adapter = advertAdapter
     }
-
     private fun observeAdvert() {
 
-lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED){
-        viewModel.uiState.collect {
-            when(it){
-                is getDataState.onSuccess->{
-                    advertAdapter.updateAdvertList(it.news)
-                    binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
-                    binding.progressBar2.visibility = View.GONE
-                }
-                is getDataState.onPending->{
-                    binding.includeRecyclerView.recyclerView.visibility = View.GONE
-                    binding.progressBar2.visibility = View.VISIBLE
-                }
-                is getDataState.onFailure->{
-                    Toast.makeText(this@MainActivity,"hata",Toast.LENGTH_LONG)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    when (it) {
+                        is GetDataState.onSuccess -> {
+                            advertAdapter.updateAdvertList(it.news as List<Advert>)
+                            binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
+                            binding.progressBar2.visibility = View.GONE
+                        }
+                        is GetDataState.onPending -> {
+                            binding.includeRecyclerView.recyclerView.visibility = View.GONE
+                            binding.progressBar2.visibility = View.VISIBLE
+                        }
+                        is GetDataState.onFailure -> {
+                            binding.progressBar2.visibility = View.GONE
+                           showAlertDialog(it.title,it.exception)
+                        }
+                    }
                 }
             }
-        }
-    }
-}
+        }}
 
-
-       /* lifecycleScope.launchWhenCreated {
-            viewModel.adverts.collect {
-                advertAdapter.updateAdvertList(it)
-            }
-        }
-        lifecycleScope.launchWhenCreated {
-            viewModel.advertLoading.collect {
-                if (it) {
-                    binding.includeRecyclerView.recyclerView.visibility = View.GONE
-                    binding.progressBar2.visibility = View.VISIBLE
-                } else {
-                    binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
-                    binding.progressBar2.visibility = View.GONE
-                }
-            }
-        }
-        lifecycleScope.launchWhenCreated {
-            viewModel.advertLoadingError.collect {
-                if (it) {
-                    Toast.makeText(this@MainActivity, "Bir Hata Meydana Geldi", Toast.LENGTH_LONG)
-                        .show()
-                }
-            }
-        }*/
+    fun showAlertDialog(title: String, exception: String) {
+        val alertBuilder = AlertDialog.Builder(this)
+        alertBuilder.setTitle(title)
+            .setMessage(exception)
+            .setPositiveButton(getString(R.string.try_again), DialogInterface.OnClickListener { dialog, id ->
+                viewModel.refreshData()
+            })
+        alertBuilder.show()
     }
+
+        /* lifecycleScope.launchWhenCreated {
+             viewModel.adverts.collect {
+                 advertAdapter.updateAdvertList(it)
+             }
+         }
+         lifecycleScope.launchWhenCreated {
+             viewModel.advertLoading.collect {
+                 if (it) {
+                     binding.includeRecyclerView.recyclerView.visibility = View.GONE
+                     binding.progressBar2.visibility = View.VISIBLE
+                 } else {
+                     binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
+                     binding.progressBar2.visibility = View.GONE
+                 }
+             }
+         }
+         lifecycleScope.launchWhenCreated {
+             viewModel.advertLoadingError.collect {
+                 if (it) {
+                     Toast.makeText(this@MainActivity, "Bir Hata Meydana Geldi", Toast.LENGTH_LONG)
+                         .show()
+                 }
+             }
+         }*/
+
 }
 /*  private fun observeLiveData() {
       viewModel.advertLoading.observe(this, Observer { loading ->

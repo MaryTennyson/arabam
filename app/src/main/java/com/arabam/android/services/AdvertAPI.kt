@@ -18,9 +18,4 @@ interface AdvertAPI {
 
     @GET("detail")
     suspend fun getDetails(@Query("id") advertID: Int): Details
-
-    //@GET("detail?id=15456643")
-    //fun getDetails(): Call<Details>
-
-
 }

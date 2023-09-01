@@ -1,46 +1,61 @@
 package com.arabam.android.viewmodel
 
-import androidx.lifecycle.MutableLiveData
+
 import androidx.lifecycle.ViewModel
-import com.arabam.android.models.detailsmodels.Details
+import androidx.lifecycle.viewModelScope
+
+import com.arabam.android.repositories.DetailsRepository
 import com.arabam.android.services.APIService
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class DetailsPageViewModel() :ViewModel(){
-    private var advertID:Int=0
+class DetailsPageViewModel(val newadvertID: Int) :ViewModel(){
+
     private val apiService= APIService
-    private val disposable= CompositeDisposable()
+    private val newsRepository= DetailsRepository(apiService,newadvertID)
+    val _uiState= MutableStateFlow<GetDataState>(GetDataState.onPending)
 
-    val details= MutableLiveData<Details>()
-
-
-    fun refreshData(newadvertID: Int){
-        advertID=newadvertID
-   //     getDetailsDataFromAPI()
+    val uiState: StateFlow<GetDataState> = _uiState
+    fun refreshData(){
+        getDetailsDataFromAPI()
     }
 
-  /*  private fun getDetailsDataFromAPI() {
-        println("getdetailse geldi")
-        disposable.add(apiService.getDataOfDetails(advertID)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object:DisposableSingleObserver<Details>(){
-                override fun onSuccess(t: Details) {
-                   details.value=t
-                }
-
-                override fun onError(e: Throwable) {
-                   e.printStackTrace()
+    private fun getDetailsDataFromAPI() {
+        viewModelScope.launch {
+            newsRepository.lastestDetails.collect {
+                if(it==null){
+                    _uiState.value= GetDataState.onFailure("Detaylar Yüklenemedi", "Detaylar boş döndü")
+                }else{
+                    _uiState.value= GetDataState.onSuccess(it)
                 }
 
 
-            }))
 
-    }*/
+        }
+    }
+}}
 
-}
+    /*  private fun getDetailsDataFromAPI() {
+          println("getdetailse geldi")
+          disposable.add(apiService.getDataOfDetails(advertID)
+              .subscribeOn(Schedulers.newThread())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribeWith(object:DisposableSingleObserver<Details>(){
+                  override fun onSuccess(t: Details) {
+                     details.value=t
+                  }
+
+                  override fun onError(e: Throwable) {
+                     e.printStackTrace()
+                  }
+
+
+              }))
+
+      }*/
+
+
 
