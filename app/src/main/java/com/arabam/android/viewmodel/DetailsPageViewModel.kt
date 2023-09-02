@@ -3,6 +3,7 @@ package com.arabam.android.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arabam.android.enums.DataState
 
 import com.arabam.android.repositories.DetailsRepository
 import com.arabam.android.services.APIService
@@ -16,10 +17,11 @@ class DetailsPageViewModel(val newadvertID: Int) :ViewModel(){
 
     private val apiService= APIService
     private val newsRepository= DetailsRepository(apiService,newadvertID)
-    val _uiState= MutableStateFlow<GetDataState>(GetDataState.onPending)
+    val _uiState= MutableStateFlow<DataState>(DataState.onPending)
 
-    val uiState: StateFlow<GetDataState> = _uiState
+    val uiState: StateFlow<DataState> = _uiState
     fun refreshData(){
+        _uiState.value= DataState.onPending
         getDetailsDataFromAPI()
     }
 
@@ -27,13 +29,10 @@ class DetailsPageViewModel(val newadvertID: Int) :ViewModel(){
         viewModelScope.launch {
             newsRepository.lastestDetails.collect {
                 if(it==null){
-                    _uiState.value= GetDataState.onFailure("Detaylar Yüklenemedi", "Detaylar boş döndü")
+                    _uiState.value= DataState.onFailure("Detaylar Yüklenemedi", "Detaylar boş döndü")
                 }else{
-                    _uiState.value= GetDataState.onSuccess(it)
+                    _uiState.value=DataState.onSuccess(it)
                 }
-
-
-
         }
     }
 }}

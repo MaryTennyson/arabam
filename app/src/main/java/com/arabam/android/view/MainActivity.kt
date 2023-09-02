@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arabam.android.adapters.ListingAdapter
 import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ActivityMainBinding
+import com.arabam.android.enums.DataState
 import com.arabam.android.models.listingmodels.Advert
-import com.arabam.android.viewmodel.GetDataState
+
 import com.arabam.android.viewmodel.ListingPageViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -49,16 +50,16 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
-                        is GetDataState.onSuccess -> {
+                        is DataState.onSuccess -> {
                             advertAdapter.updateAdvertList(it.news as List<Advert>)
                             binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
                             binding.progressBar2.visibility = View.GONE
                         }
-                        is GetDataState.onPending -> {
+                        is DataState.onPending -> {
                             binding.includeRecyclerView.recyclerView.visibility = View.GONE
                             binding.progressBar2.visibility = View.VISIBLE
                         }
-                        is GetDataState.onFailure -> {
+                        is DataState.onFailure -> {
                             binding.progressBar2.visibility = View.GONE
                            showAlertDialog(it.title,it.exception)
                         }
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
         }}
 
-    fun showAlertDialog(title: String, exception: String) {
+  fun showAlertDialog(title: String, exception: String) {
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle(title)
             .setMessage(exception)

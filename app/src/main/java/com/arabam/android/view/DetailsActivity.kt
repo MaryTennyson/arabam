@@ -1,8 +1,10 @@
 package com.arabam.android.view
 
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProviders
@@ -11,9 +13,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arabam.android.adapters.DetailAdapter
 import com.arabam.android.adapters.SliderAdapter
+import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.DetailedMainBinding
+import com.arabam.android.enums.DataState
 import com.arabam.android.viewmodel.DetailsPageViewModel
-import com.arabam.android.viewmodel.GetDataState
+
 import com.smarteist.autoimageslider.SliderView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,21 +45,18 @@ class DetailsActivity : AppCompatActivity() {
 
         val advertID = intent.getIntExtra("AdvertID", 0)
 
-        viewModel = ViewModelProviders.of(this).get(DetailsPageViewModel(advertID)::class.java)
-        viewModel.refreshData()
-
         sliderView = binding.imageslider
-
-
 
         binding.descriptions.visibility = View.GONE
         binding.detailsRecyclerView.visibility = View.VISIBLE
-
+        binding.detailslayout.visibility = View.GONE
 
 
         if (advertID == 0) {
             println("bir hata meydana geldi")
         } else {
+            viewModel = ViewModelProviders.of(this@DetailsActivity).get(DetailsPageViewModel(advertID)::class.java) // TODO has no zero argument constructor hatası alınıyor ÇÖZÜM HILT
+            viewModel.refreshData()
             observeDetails()
         }
     }
@@ -65,15 +66,52 @@ class DetailsActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
-                        is GetDataState.onPending ->
-                        is GetDataState.onSuccess ->
-                        is GetDataState.onFailure ->
-                    }
+                        is DataState.onPending -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.detailslayout.visibility = View.GONE
+                        }
+                        is DataState.onSuccess -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.detailslayout.visibility = View.VISIBLE
+                        }
+                        is DataState.onFailure ->{
+                            binding.progressBar.visibility = View.GONE
+                            binding.detailslayout.visibility = View.GONE
+                            showAlertDialog(it.title,it.exception)
 
+
+                        }
+                    }
                 }
             }
         }
     }
+
+
+    fun showAlertDialog(title: String, exception: String) {
+        val alertBuilder = AlertDialog.Builder(this)
+        alertBuilder.setTitle(title)
+            .setMessage(exception)
+            .setPositiveButton(getString(R.string.try_again), DialogInterface.OnClickListener { dialog, id ->
+                viewModel.refreshData()
+            })
+        alertBuilder.show()
+    }
+
+    fun onClickedAdvertInformation(view: View) {
+        binding.descriptions.visibility = View.GONE
+        binding.detailsRecyclerView.visibility = View.VISIBLE
+
+    }
+
+    fun onClickedAdvertDescription(view: View) {
+        binding.detailsRecyclerView.visibility = View.GONE
+        binding.descriptions.visibility = View.VISIBLE
+
+
+    }
+}
+
 
 /*   private fun observeLiveData(){
        viewModel.details.observe(this, Observer { detail->
@@ -176,6 +214,3 @@ class DetailsActivity : AppCompatActivity() {
  })
 
 }*/
-
-
-
