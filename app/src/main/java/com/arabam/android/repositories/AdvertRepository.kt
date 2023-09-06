@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-class AdvertRepository ( val dataService: APIService ){
+class AdvertRepository ( val dataService: APIService){
 
     val lastestAdvert: Flow<List<Advert>> = flow {
        emit(dataService.getDataOfAdverts())

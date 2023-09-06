@@ -12,10 +12,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface AdvertAPI {
-
     @GET("listing?sort=1&sortDirection=0&take=15")
     suspend fun getAdverts(): List<Advert>
-
     @GET("detail")
     suspend fun getDetails(@Query("id") advertID: Int): Details
 }

@@ -3,6 +3,7 @@ package com.arabam.android.view
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +17,8 @@ import com.arabam.android.adapters.SliderAdapter
 import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.DetailedMainBinding
 import com.arabam.android.enums.DataState
+import com.arabam.android.models.detailsmodels.Details
 import com.arabam.android.viewmodel.DetailsPageViewModel
-
 import com.smarteist.autoimageslider.SliderView
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 
 class DetailsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: DetailsPageViewModel
+    private lateinit var viewModel: DetailsPageViewModel //(?) //constructor içinde class interface vb gönderilmeli, string vs değil
     private lateinit var binding: DetailedMainBinding
 
     private var detailAdapter = DetailAdapter(arrayListOf())
@@ -33,7 +34,7 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var sliderView: SliderView
 
     lateinit var sliderAdapter: SliderAdapter
-
+    var advertID: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,8 @@ class DetailsActivity : AppCompatActivity() {
         binding.detailsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.detailsRecyclerView.adapter = detailAdapter
 
-        val advertID = intent.getIntExtra("AdvertID", 0)
+        advertID = intent.getIntExtra("AdvertID", 0)
+        viewModel = ViewModelProviders.of(this).get(DetailsPageViewModel::class.java)
 
         sliderView = binding.imageslider
 
@@ -55,8 +57,8 @@ class DetailsActivity : AppCompatActivity() {
         if (advertID == 0) {
             println("bir hata meydana geldi")
         } else {
-            viewModel = ViewModelProviders.of(this@DetailsActivity).get(DetailsPageViewModel(advertID)::class.java) // TODO has no zero argument constructor hatası alınıyor ÇÖZÜM HILT
-            viewModel.refreshData()
+            viewModel = ViewModelProviders.of(this).get(DetailsPageViewModel::class.java)
+            viewModel.refreshData(advertID)
             observeDetails()
         }
     }
@@ -65,20 +67,33 @@ class DetailsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
+
                     when (it) {
                         is DataState.onPending -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.detailslayout.visibility = View.GONE
                         }
                         is DataState.onSuccess -> {
+                            val detail = it.news as Details
+                            detailAdapter.updateAdvertList(detail.properties)
+                            binding.titleView.text = detail!!.title
+                            binding.locationView.text =
+                                "${detail!!.location.cityName}, ${detail!!.location.townName}"
+                            binding.priceView.text = detail!!.priceFormatted
+                            binding.userName.text = detail!!.userInfo.nameSurname
+                            binding.userPhoneNumber.text = "+${detail!!.userInfo.phone}"
+                            binding.descriptions.text = Html.fromHtml(detail!!.text).toString()
+                            binding.descriptions.movementMethod =
+                                android.text.method.ScrollingMovementMethod()
+                            sliderAdapter = SliderAdapter(detail.photos)
+                            sliderView.setSliderAdapter(sliderAdapter)
                             binding.progressBar.visibility = View.GONE
                             binding.detailslayout.visibility = View.VISIBLE
                         }
-                        is DataState.onFailure ->{
+                        is DataState.onFailure -> {
                             binding.progressBar.visibility = View.GONE
                             binding.detailslayout.visibility = View.GONE
-                            showAlertDialog(it.title,it.exception)
-
+                            showAlertDialog(it.title, it.exception)
 
                         }
                     }
@@ -87,14 +102,15 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
-
     fun showAlertDialog(title: String, exception: String) {
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle(title)
             .setMessage(exception)
-            .setPositiveButton(getString(R.string.try_again), DialogInterface.OnClickListener { dialog, id ->
-                viewModel.refreshData()
-            })
+            .setPositiveButton(
+                getString(R.string.try_again),
+                DialogInterface.OnClickListener { dialog, id ->
+                    viewModel.refreshData(advertID)
+                })
         alertBuilder.show()
     }
 

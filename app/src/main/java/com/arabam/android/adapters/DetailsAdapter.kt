@@ -26,7 +26,6 @@ class DetailHolder(val binding: DetailsRowBinding): RecyclerView.ViewHolder(bind
        holder.binding.detailInfoView.text= propertyList.get(position).value
 
     }
-
     override fun getItemCount(): Int {
        return propertyList.size
     }
@@ -35,6 +34,4 @@ class DetailHolder(val binding: DetailsRowBinding): RecyclerView.ViewHolder(bind
        propertyList.clear()
        propertyList.addAll(newPropertyList)
        notifyDataSetChanged()
-
-
 }}

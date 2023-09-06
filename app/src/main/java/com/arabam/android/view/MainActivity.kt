@@ -20,13 +20,14 @@ import com.arabam.android.enums.DataState
 import com.arabam.android.models.listingmodels.Advert
 
 import com.arabam.android.viewmodel.ListingPageViewModel
+
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
 
-class MainActivity : AppCompatActivity() {
 
+class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: ListingPageViewModel
     private lateinit var binding: ActivityMainBinding
     private val advertAdapter = ListingAdapter(arrayListOf())

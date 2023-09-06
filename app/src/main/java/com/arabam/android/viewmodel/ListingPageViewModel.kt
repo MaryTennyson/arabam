@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.arabam.android.enums.DataState
 import com.arabam.android.repositories.AdvertRepository
 import com.arabam.android.services.APIService
+import com.arabam.android.services.AdvertAPI
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,8 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-kapt'
 }
 
 android {
@@ -39,7 +37,7 @@ android {
 
 
 def retrofitVersion = '2.9.0'
-def rxJavaVersion = '2.1.1'
+
 
 dependencies {
 
@@ -48,6 +46,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
 
 
     //Image Slider and  for Image from Url
@@ -60,29 +59,15 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
-
-    //RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
-
-    //Picasso
-    //  implementation 'com.squareup.picasso:picasso:2.8' bunun yerine Glide kullandım
-
     //LifeCycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 
-
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
     //Hilt
-    implementation "com.google.dagger:hilt-android:2.35.1"
-    kapt "com.google.dagger:hilt-compiler:2.35.1"
 
 }
 
-kapt {
-    correctErrorTypes = true
-}
