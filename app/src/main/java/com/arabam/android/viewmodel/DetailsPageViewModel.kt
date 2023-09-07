@@ -6,19 +6,19 @@ import androidx.lifecycle.viewModelScope
 import com.arabam.android.enums.DataState
 
 import com.arabam.android.repositories.DetailsRepository
-import com.arabam.android.services.APIService
+
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class DetailsPageViewModel
-    : ViewModel() {
-    val apiService = APIService
-    private val newsRepository = DetailsRepository(apiService)
+@HiltViewModel
+class DetailsPageViewModel @Inject constructor(val newsRepository: DetailsRepository) :
+    ViewModel() {
     val _uiState = MutableStateFlow<DataState>(DataState.onPending)
 
     val uiState: StateFlow<DataState> = _uiState

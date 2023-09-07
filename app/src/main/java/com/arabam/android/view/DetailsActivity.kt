@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -20,13 +21,14 @@ import com.arabam.android.enums.DataState
 import com.arabam.android.models.detailsmodels.Details
 import com.arabam.android.viewmodel.DetailsPageViewModel
 import com.smarteist.autoimageslider.SliderView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: DetailsPageViewModel //(?) //constructor içinde class interface vb gönderilmeli, string vs değil
+    private val viewModel: DetailsPageViewModel by viewModels()
     private lateinit var binding: DetailedMainBinding
 
     private var detailAdapter = DetailAdapter(arrayListOf())
@@ -45,7 +47,7 @@ class DetailsActivity : AppCompatActivity() {
         binding.detailsRecyclerView.adapter = detailAdapter
 
         advertID = intent.getIntExtra("AdvertID", 0)
-        viewModel = ViewModelProviders.of(this).get(DetailsPageViewModel::class.java)
+
 
         sliderView = binding.imageslider
 
@@ -57,7 +59,6 @@ class DetailsActivity : AppCompatActivity() {
         if (advertID == 0) {
             println("bir hata meydana geldi")
         } else {
-            viewModel = ViewModelProviders.of(this).get(DetailsPageViewModel::class.java)
             viewModel.refreshData(advertID)
             observeDetails()
         }

@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -20,15 +21,16 @@ import com.arabam.android.enums.DataState
 import com.arabam.android.models.listingmodels.Advert
 
 import com.arabam.android.viewmodel.ListingPageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: ListingPageViewModel
+    private val viewModel: ListingPageViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private val advertAdapter = ListingAdapter(arrayListOf())
 
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        viewModel = ViewModelProviders.of(this).get(ListingPageViewModel::class.java)
+
         viewModel.refreshData()
         observeAdvert()
 

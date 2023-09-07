@@ -6,14 +6,9 @@ import com.arabam.android.models.listingmodels.Advert
 
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-object APIService {
-    private val BASE_URL = "https://sandbox.arabamd.com/api/v1/"
-    private val api = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        //       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .build().create<AdvertAPI>()
+class APIService @Inject constructor(val api: AdvertAPI) {
 
     suspend fun getDataOfAdverts(): List<Advert> {
         return api.getAdverts()

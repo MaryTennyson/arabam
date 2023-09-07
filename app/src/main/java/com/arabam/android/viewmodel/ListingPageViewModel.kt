@@ -1,22 +1,20 @@
 package com.arabam.android.viewmodel
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arabam.android.enums.DataState
 import com.arabam.android.repositories.AdvertRepository
-import com.arabam.android.services.APIService
-import com.arabam.android.services.AdvertAPI
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class ListingPageViewModel : ViewModel() {
-    private val apiService = APIService
-    private val newsRepository = AdvertRepository(apiService)
+@HiltViewModel
+class ListingPageViewModel @Inject constructor(val advertRepository: AdvertRepository) :
+    ViewModel() {
     private val _uiState = MutableStateFlow<DataState>(DataState.onPending)
     val uiState: StateFlow<DataState> = _uiState
     fun refreshData() {
@@ -26,7 +24,7 @@ class ListingPageViewModel : ViewModel() {
 
     private fun getAdvertDataFromAPI() {
         viewModelScope.launch {
-            newsRepository.lastestAdvert.collect {
+            advertRepository.getDataOfAdvert.collect {
                 if (it.isEmpty()) {
                     _uiState.value = DataState.onFailure("Data alınamadı", "Data list boş döndü")
                 } else {
