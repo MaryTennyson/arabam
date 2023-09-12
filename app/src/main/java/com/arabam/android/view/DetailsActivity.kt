@@ -16,7 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.arabam.android.adapters.DetailAdapter
 import com.arabam.android.adapters.SliderAdapter
 import com.arabam.android.assigment.R
-import com.arabam.android.assigment.databinding.DetailedMainBinding
+import com.arabam.android.assigment.databinding.FragmentDetailsPageBinding
+
 import com.arabam.android.enums.DataState
 import com.arabam.android.models.detailsmodels.Details
 import com.arabam.android.viewmodel.DetailsPageViewModel
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 class DetailsActivity : AppCompatActivity() {
 
     private val viewModel: DetailsPageViewModel by viewModels()
-    private lateinit var binding: DetailedMainBinding
+    private lateinit var binding: FragmentDetailsPageBinding
 
     private var detailAdapter = DetailAdapter(arrayListOf())
 
@@ -40,7 +41,7 @@ class DetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DetailedMainBinding.inflate(layoutInflater)
+        binding = FragmentDetailsPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.detailsRecyclerView.layoutManager = LinearLayoutManager(this)

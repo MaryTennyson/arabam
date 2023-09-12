@@ -2,6 +2,7 @@ package com.arabam.android.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arabam.android.assigment.databinding.DetailsRowBinding
 import com.arabam.android.models.Property

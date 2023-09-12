@@ -1,12 +1,10 @@
 package com.arabam.android.adapters
 
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.arabam.android.view.DetailsActivity
-
+import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ListingRowBinding
 import com.arabam.android.models.listingmodels.Advert
 import com.bumptech.glide.Glide
@@ -27,29 +25,31 @@ class ListingAdapter(val advertList: ArrayList<Advert>) :
 
     override fun onBindViewHolder(holder: AdvertHolder, position: Int) {
         holder.binding.titleView.text = advertList.get(position).title
-        holder.binding.locationView.text ="${advertList.get(position).location.cityName}, ${advertList.get(position).location.townName}"
+        holder.binding.locationView.text =
+            "${advertList.get(position).location.cityName}, ${advertList.get(position).location.townName}"
         holder.binding.priceFormattedView.text = advertList.get(position).priceFormatted
 
         val newpath = changeUrl(advertList.get(position).photo)
-
         Glide.with(holder.itemView).load(newpath).fitCenter()
             .into(holder.binding.carImageView)
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
-            intent.putExtra("AdvertID", advertList.get(position).id)
-            Log.i("test", "${advertList.get(position).id}")
-            holder.itemView.context.startActivity(intent)
+            /*  val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
+              intent.putExtra("AdvertID", advertList.get(position).id)
+              Log.i("test", "${advertList.get(position).id}")
+              holder.itemView.context.startActivity(intent)*/
+              it.findNavController().navigate(R.id.action_listingPageFragment_to_detailsPageFragment)
         }
-
     }
+
     private fun changeUrl(imagePath: String): String {
         return imagePath.replace("{0}", "800x600")
     }
 
-    fun updateAdvertList(newAdvertList: List<Advert>){
+    fun updateAdvertList(newAdvertList: List<Advert>) {
         advertList.clear()
         advertList.addAll(newAdvertList)
         notifyDataSetChanged()
     }
+
 }

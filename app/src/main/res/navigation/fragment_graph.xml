@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navi_graph"
+    android:id="@+id/fragment_graph"
     app:startDestination="@id/listingPageFragment">
 
     <fragment
@@ -21,5 +21,9 @@
         <action
             android:id="@+id/action_detailsPageFragment_to_listingPageFragment"
             app:destination="@id/listingPageFragment" />
+        <argument
+            android:name="advertID"
+            app:argType="string"
+            android:defaultValue="0" />
     </fragment>
 </navigation>
