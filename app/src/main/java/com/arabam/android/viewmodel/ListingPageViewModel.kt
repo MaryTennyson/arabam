@@ -28,7 +28,7 @@ class ListingPageViewModel @Inject constructor(val advertRepository: AdvertRepos
                 if (it.isEmpty()) {
                     _uiState.value = DataState.onFailure("Data alınamadı", "Data list boş döndü")
                 } else {
-                    delay(2000)
+                    delay(1000)
                     //   _uiState.value = GetDataState.onFailure("Data alınamadı", "Data list boş döndü")
                     _uiState.value = DataState.onSuccess(it)
                 }

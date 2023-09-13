@@ -11,19 +11,20 @@
         android:label="fragment_listing_page"
         tools:layout="@layout/fragment_listing_page" >
         <action
-            android:id="@+id/action_listingPageFragment_to_detailsPageFragment"
-            app:destination="@id/detailsPageFragment" />
+            android:id="@+id/action_listingPageFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/detailsPageFragment"
-        android:name="com.arabam.android.view.DetailsPageFragment"
-        android:label="DetailsPageFragment" >
+        android:id="@+id/detailsFragment"
+        android:name="com.arabam.android.view.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
         <action
-            android:id="@+id/action_detailsPageFragment_to_listingPageFragment"
+            android:id="@+id/action_detailsFragment_to_listingPageFragment"
             app:destination="@id/listingPageFragment" />
         <argument
             android:name="advertID"
-            app:argType="string"
+            app:argType="integer"
             android:defaultValue="0" />
     </fragment>
 </navigation>

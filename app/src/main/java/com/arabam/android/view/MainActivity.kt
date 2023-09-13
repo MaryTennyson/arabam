@@ -3,80 +3,39 @@ package com.arabam.android.view
 
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.arabam.android.adapters.ListingAdapter
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ActivityMainBinding
-import com.arabam.android.viewmodel.ListingPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val viewModel: ListingPageViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
-    private val advertAdapter = ListingAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //   setSupportActionBar(findViewById(R.id.toolbar)) //TODO GERİ EKLE
-
-
-        viewModel.refreshData()
-        observeAdvert()
-        supportFragmentManager
-
-        //      binding.includeRecyclerView.recyclerView.layoutManager = LinearLayoutManager(this)
-        //     binding.includeRecyclerView.recyclerView.adapter = advertAdapter
     }
 
-    private fun observeAdvert() {
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    when (it) {
-                        /*    is DataState.onSuccess -> {
-                                advertAdapter.updateAdvertList(it.news as List<Advert>)
-                                binding.includeRecyclerView.recyclerView.visibility = View.VISIBLE
-                                binding.progressBar2.visibility = View.GONE
-                            }
-                            is DataState.onPending -> {
-                                binding.includeRecyclerView.recyclerView.visibility = View.GONE
-                                binding.progressBar2.visibility = View.VISIBLE
-                            }
-                            is DataState.onFailure -> {
-                                binding.progressBar2.visibility = View.GONE
-                               showAlertDialog(it.title,it.exception)
-                            }*/
-                    }
-                }
-            }
-        }
-    }
-
-    fun showAlertDialog(title: String, exception: String) {
+/*    fun showAlertDialog(title: String, exception: String) {
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle(title)
             .setMessage(exception)
             .setPositiveButton(
                 getString(R.string.try_again),
                 DialogInterface.OnClickListener { dialog, id ->
-                    viewModel.refreshData()
+                    //     viewModel.refreshData()
                 })
         alertBuilder.show()
     }
 
-    /* lifecycleScope.launchWhenCreated {
+     lifecycleScope.launchWhenCreated {
          viewModel.adverts.collect {
              advertAdapter.updateAdvertList(it)
          }

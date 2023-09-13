@@ -2,11 +2,11 @@ package com.arabam.android.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.arabam.android.assigment.R
 import com.arabam.android.assigment.databinding.ListingRowBinding
 import com.arabam.android.models.listingmodels.Advert
+import com.arabam.android.view.ListingPageFragmentDirections
 import com.bumptech.glide.Glide
 
 
@@ -34,11 +34,11 @@ class ListingAdapter(val advertList: ArrayList<Advert>) :
             .into(holder.binding.carImageView)
 
         holder.itemView.setOnClickListener {
-            /*  val intent = Intent(holder.itemView.context, DetailsActivity::class.java)
-              intent.putExtra("AdvertID", advertList.get(position).id)
-              Log.i("test", "${advertList.get(position).id}")
-              holder.itemView.context.startActivity(intent)*/
-              it.findNavController().navigate(R.id.action_listingPageFragment_to_detailsPageFragment)
+            val action =
+                ListingPageFragmentDirections.actionListingPageFragmentToDetailsFragment(
+                    advertList.get(position).id
+                )
+            Navigation.findNavController(it).navigate(action)
         }
     }
 
