@@ -23,7 +23,8 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideAdvertAPI(retrofit: Retrofit): AdvertAPI {
+    fun
+            provideAdvertAPI(retrofit: Retrofit): AdvertAPI {
         return retrofit.create(AdvertAPI::class.java)
     }
 

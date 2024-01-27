@@ -45,7 +45,6 @@ class ListingPageFragment : Fragment() {
     private fun observeAdvert() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
                 viewModel.uiState.collect {
                     when (it) {
                         is DataState.onPending -> {

@@ -29,7 +29,7 @@ class ListingAdapter(val advertList: ArrayList<Advert>) :
             "${advertList.get(position).location.cityName}, ${advertList.get(position).location.townName}"
         holder.binding.priceFormattedView.text = advertList.get(position).priceFormatted
 
-        val newpath = changeUrl(advertList.get(position).photo)
+        val newpath = advertList.get(position).photo.replace("800x600")
         Glide.with(holder.itemView).load(newpath).fitCenter()
             .into(holder.binding.carImageView)
 
@@ -42,8 +42,9 @@ class ListingAdapter(val advertList: ArrayList<Advert>) :
         }
     }
 
-    private fun changeUrl(imagePath: String): String {
-        return imagePath.replace("{0}", "800x600")
+
+    private infix fun String.replace(sizeOfImage: String): String{
+        return this.replace("{0}", sizeOfImage)
     }
 
     fun updateAdvertList(newAdvertList: List<Advert>) {
